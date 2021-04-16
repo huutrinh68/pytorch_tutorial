@@ -5,6 +5,8 @@ USER root
 RUN apt-get -y update && \
   apt-get -y upgrade && \
   apt-get -y install vim && \
+  apt-get -y install python-opengl && \
+  apt-get -y install xvfb && \
   rm -rf /var/lib/apt/lists/*
 
 #### Install GPU driver
@@ -42,4 +44,7 @@ COPY ./requirements.txt /requirements.txt
 RUN pip install torch==1.8.1+cu111 torchvision==0.9.1+cu111 torchaudio==0.8.1 -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip install -r /requirements.txt
 
+RUN rm -rf gym && git clone https://github.com/openai/gym && cd gym && pip3 install -e .
+
+ENV PYTHONPATH "${PYTHONPATH}:/home/jovyan/"
 USER jovyan
